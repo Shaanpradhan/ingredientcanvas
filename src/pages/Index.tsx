@@ -142,7 +142,7 @@ const Index = () => {
                   </div>
                 </motion.div>
                 
-                <motion.h1 className="text-4xl font-semibold mb-3 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400" initial={{
+                <motion.h1 initial={{
               opacity: 0,
               y: -10
             }} animate={{
@@ -150,7 +150,7 @@ const Index = () => {
               y: 0
             }} transition={{
               delay: 0.2
-            }}>
+            }} className="text-4xl font-semibold mb-3 tracking-tight bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 text-gray-700 my-0 py-[17px]">
                   Which cuisine inspires you?
                 </motion.h1>
                 
