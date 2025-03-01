@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { 
   Flame, Lollipop, UtensilsCrossed, Banana, Leaf,
-  Pizza, Taco, Soup, Croissant, Beef,
+  Pizza, Sandwich, Soup, Croissant, Beef,
   ArrowLeft
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -85,7 +85,7 @@ const cuisineOptions: CravingOption[] = [
   { 
     id: "mexican", 
     name: "Mexican", 
-    icon: <Taco size={32} />, 
+    icon: <Sandwich size={32} />, 
     color: "text-green-600",
     bgColor: "bg-green-50",
     hoverColor: "group-hover:bg-green-100",

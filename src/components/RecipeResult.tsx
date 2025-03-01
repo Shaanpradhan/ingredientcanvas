@@ -7,6 +7,10 @@ import { Separator } from "@/components/ui/separator";
 import { Ingredient } from "./IngredientItem";
 import { cn } from "@/lib/utils";
 
+// Types for flavor and cuisine
+type FlavorProfile = "spicy" | "sweet" | "savory" | "tangy" | "fresh";
+type Cuisine = "italian" | "mexican" | "asian" | "mediterranean" | "american";
+
 // Mock recipe data
 interface Recipe {
   title: string;
@@ -64,11 +68,13 @@ const mockRecipe: Recipe = {
 
 interface RecipeResultProps {
   selectedIngredients: Ingredient[];
+  flavorProfile: FlavorProfile | null;
+  cuisine: Cuisine | null;
   onBack: () => void;
 }
 
-const RecipeResult = ({ selectedIngredients, onBack }: RecipeResultProps) => {
-  // In a real app, we would use the selectedIngredients to generate a recipe
+const RecipeResult = ({ selectedIngredients, flavorProfile, cuisine, onBack }: RecipeResultProps) => {
+  // In a real app, we would use the selectedIngredients, flavorProfile, and cuisine to generate a recipe
   // For now, we'll just use the mock recipe
 
   return (
