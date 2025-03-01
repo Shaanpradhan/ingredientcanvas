@@ -141,7 +141,7 @@
   }
 
   .ingredient-item.selected {
-    @apply bg-ingredient-selected ring-2 ring-primary/10;
+    @apply bg-gradient-to-b from-indigo-50 to-purple-50 border-indigo-200;
   }
 
   .ingredient-item-icon {
@@ -174,4 +174,24 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/30;
   }
+
+  /* Gradient text animations */
+  .gradient-text-hover {
+    @apply bg-clip-text text-transparent bg-gradient-to-r hover:bg-gradient-to-l transition-all duration-500;
+  }
+
+  /* Fun animated background for special items */
+  .fun-bg {
+    @apply relative overflow-hidden;
+  }
+  
+  .fun-bg::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-r from-purple-50 to-pink-50 opacity-0 transition-opacity duration-300;
+  }
+  
+  .fun-bg:hover::before {
+    @apply opacity-100;
+  }
 }
+

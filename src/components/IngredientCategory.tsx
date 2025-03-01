@@ -11,6 +11,7 @@ interface IngredientCategoryProps {
   selectedIngredients: Ingredient[];
   onIngredientToggle: (ingredient: Ingredient) => void;
   icon: React.ReactNode;
+  bgColor?: string;
 }
 
 const IngredientCategory = ({
@@ -19,6 +20,7 @@ const IngredientCategory = ({
   selectedIngredients,
   onIngredientToggle,
   icon,
+  bgColor = "bg-secondary",
 }: IngredientCategoryProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -36,11 +38,14 @@ const IngredientCategory = ({
     >
       <motion.button
         layout
-        className="w-full flex items-center justify-between px-4 py-3 mb-3 bg-secondary rounded-lg focus-visible-ring"
+        className={cn(
+          "w-full flex items-center justify-between px-4 py-3 mb-3 rounded-lg focus-visible-ring",
+          bgColor
+        )}
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center">
-          <div className="mr-3 text-primary/80">{icon}</div>
+          <div className="mr-3">{icon}</div>
           <h3 className="text-lg font-medium">{title}</h3>
           {selectedInCategory.length > 0 && (
             <div className="ml-2 px-2 py-0.5 text-xs font-medium bg-primary/10 rounded-full">
@@ -74,6 +79,7 @@ const IngredientCategory = ({
                     (selected) => selected.id === ingredient.id
                   )}
                   onToggle={onIngredientToggle}
+                  recommended={ingredient.recommended}
                 />
               ))}
             </div>
