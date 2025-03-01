@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { Clock, Users, ArrowLeft, ChefHat, Utensils, ScrollText } from "lucide-react";
@@ -73,9 +72,10 @@ const generateRecipe = (ingredients: Ingredient[], flavor: FlavorProfile | null,
     if (flavoringredient && !baseRecipe.ingredients.some(ing => ing.name === flavoringredient.name)) {
       baseRecipe.ingredients.push(flavoringredient);
     }
-    
-    baseRecipe.title = `${capitalize(flavor)} ${getCuisineAdjective(cuisine || "italian")} Delight`;
   }
+
+  // Generate title based on ingredients, flavor and cuisine
+  baseRecipe.title = generateTitle(selectedIngredientsList, flavor, cuisine);
 
   // Generate appropriate instructions based on ingredients and cuisine
   baseRecipe.instructions = generateInstructions(selectedIngredientsList, cuisine, flavor);
@@ -87,6 +87,117 @@ const generateRecipe = (ingredients: Ingredient[], flavor: FlavorProfile | null,
   baseRecipe.tips = generateTips(selectedIngredientsList, flavor, cuisine);
 
   return baseRecipe;
+};
+
+// New function to generate unique recipe titles
+const generateTitle = (
+  ingredients: { name: string, amount: string }[],
+  flavor: FlavorProfile | null,
+  cuisine: Cuisine | null
+): string => {
+  if (ingredients.length === 0) {
+    return "Custom Recipe";
+  }
+
+  // Get primary ingredient - usually a protein or the first important ingredient
+  const proteins = ingredients.filter(ing => 
+    ["Beef", "Chicken", "Fish", "Pork", "Tofu", "Shrimp", "Eggs"].includes(ing.name)
+  );
+  
+  const mainVegetables = ingredients.filter(ing => 
+    ["Carrot", "Broccoli", "Spinach", "Tomato", "Bell Pepper", "Potato"].includes(ing.name)
+  );
+
+  const herbs = ingredients.filter(ing => 
+    ["Basil", "Oregano", "Cilantro", "Parsley", "Thyme", "Rosemary"].includes(ing.name)
+  );
+
+  // Determine main ingredient for the title
+  let mainIngredient = "";
+  if (proteins.length > 0) {
+    mainIngredient = proteins[0].name;
+  } else if (mainVegetables.length > 0) {
+    mainIngredient = mainVegetables[0].name;
+  } else if (ingredients.length > 0) {
+    mainIngredient = ingredients[0].name;
+  }
+
+  // Determine secondary ingredient for complexity
+  let secondaryIngredient = "";
+  if (proteins.length > 0 && mainVegetables.length > 0) {
+    secondaryIngredient = ` with ${mainVegetables[0].name}`;
+  } else if (mainVegetables.length > 1) {
+    secondaryIngredient = ` with ${mainVegetables[1].name}`;
+  } else if (herbs.length > 0) {
+    secondaryIngredient = ` with ${herbs[0].name}`;
+  }
+
+  // Generate title based on cuisine
+  let cuisinePrefix = "";
+  if (cuisine) {
+    switch (cuisine) {
+      case "italian":
+        cuisinePrefix = "Italian ";
+        break;
+      case "mexican":
+        cuisinePrefix = "Mexican ";
+        break;
+      case "asian":
+        cuisinePrefix = "Asian ";
+        break;
+      case "mediterranean":
+        cuisinePrefix = "Mediterranean ";
+        break;
+      case "american":
+        cuisinePrefix = "American ";
+        break;
+    }
+  }
+
+  // Generate title based on flavor
+  let flavorAdjective = "";
+  if (flavor) {
+    switch (flavor) {
+      case "spicy":
+        flavorAdjective = "Spicy ";
+        break;
+      case "sweet":
+        flavorAdjective = "Sweet ";
+        break;
+      case "savory":
+        flavorAdjective = "Savory ";
+        break;
+      case "tangy":
+        flavorAdjective = "Tangy ";
+        break;
+      case "fresh":
+        flavorAdjective = "Fresh ";
+        break;
+    }
+  }
+
+  // Generate dish type based on ingredients and cuisine
+  let dishType = "Dish";
+  
+  if (cuisine === "italian" && ingredients.some(ing => ing.name === "Pasta")) {
+    dishType = "Pasta";
+  } else if (cuisine === "italian" && ingredients.some(ing => ing.name === "Rice")) {
+    dishType = "Risotto";
+  } else if (cuisine === "mexican" && (ingredients.some(ing => ing.name === "Tortilla") || ingredients.some(ing => ing.name === "Corn"))) {
+    dishType = "Tacos";
+  } else if (cuisine === "asian" && ingredients.some(ing => ing.name === "Rice")) {
+    dishType = "Stir-Fry";
+  } else if (cuisine === "mediterranean" && (ingredients.some(ing => ing.name === "Eggplant") || ingredients.some(ing => ing.name === "Zucchini"))) {
+    dishType = "Casserole";
+  } else if (proteins.length > 0 && mainVegetables.length > 2) {
+    dishType = "Bowl";
+  } else if (ingredients.some(ing => ing.name === "Bread") || ingredients.some(ing => ing.name === "Tortilla")) {
+    dishType = "Sandwich";
+  } else if (ingredients.some(ing => ing.name === "Rice") || ingredients.some(ing => ing.name === "Quinoa")) {
+    dishType = "Bowl";
+  }
+
+  return `${flavorAdjective}${cuisinePrefix}${mainIngredient}${secondaryIngredient} ${dishType}`;
 };
 
 // Helper functions for recipe generation
