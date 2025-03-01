@@ -1,13 +1,12 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Beef, Fish, Carrot, Wheat, Cherry, 
-  Egg, Cheese, Milk, Salt, Leaf, 
-  Search, XCircle, ArrowRight
+  Egg, Milk, Search, XCircle, ArrowRight,
+  Cookie, Soup
 } from "lucide-react";
 import IngredientCategory from "./IngredientCategory";
-import { Ingredient } from "./IngredientItem";
+import IngredientItem, { Ingredient } from "./IngredientItem";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +25,7 @@ const ingredientsData: Ingredient[] = [
   // Vegetables
   { id: "carrot", name: "Carrot", icon: <Carrot size={24} />, category: "vegetable" },
   { id: "broccoli", name: "Broccoli", icon: <Carrot size={24} />, category: "vegetable" },
-  { id: "spinach", name: "Spinach", icon: <Leaf size={24} />, category: "vegetable" },
+  { id: "spinach", name: "Spinach", icon: <Carrot size={24} />, category: "vegetable" },
   { id: "tomato", name: "Tomato", icon: <Cherry size={24} />, category: "vegetable" },
   { id: "onion", name: "Onion", icon: <Carrot size={24} />, category: "vegetable" },
   { id: "garlic", name: "Garlic", icon: <Carrot size={24} />, category: "vegetable" },
@@ -42,18 +41,18 @@ const ingredientsData: Ingredient[] = [
   
   // Dairy
   { id: "milk", name: "Milk", icon: <Milk size={24} />, category: "dairy" },
-  { id: "cheese", name: "Cheese", icon: <Cheese size={24} />, category: "dairy" },
+  { id: "cheese", name: "Cheese", icon: <Egg size={24} />, category: "dairy" },
   { id: "yogurt", name: "Yogurt", icon: <Milk size={24} />, category: "dairy" },
-  { id: "butter", name: "Butter", icon: <Cheese size={24} />, category: "dairy" },
+  { id: "butter", name: "Butter", icon: <Egg size={24} />, category: "dairy" },
   
   // Spices
-  { id: "salt", name: "Salt", icon: <Salt size={24} />, category: "spice" },
-  { id: "pepper", name: "Pepper", icon: <Salt size={24} />, category: "spice" },
-  { id: "oregano", name: "Oregano", icon: <Leaf size={24} />, category: "spice" },
-  { id: "basil", name: "Basil", icon: <Leaf size={24} />, category: "spice" },
-  { id: "thyme", name: "Thyme", icon: <Leaf size={24} />, category: "spice" },
-  { id: "paprika", name: "Paprika", icon: <Salt size={24} />, category: "spice" },
-  { id: "cumin", name: "Cumin", icon: <Salt size={24} />, category: "spice" },
+  { id: "salt", name: "Salt", icon: <Cookie size={24} />, category: "spice" },
+  { id: "pepper", name: "Pepper", icon: <Cookie size={24} />, category: "spice" },
+  { id: "oregano", name: "Oregano", icon: <Carrot size={24} />, category: "spice" },
+  { id: "basil", name: "Basil", icon: <Carrot size={24} />, category: "spice" },
+  { id: "thyme", name: "Thyme", icon: <Carrot size={24} />, category: "spice" },
+  { id: "paprika", name: "Paprika", icon: <Cookie size={24} />, category: "spice" },
+  { id: "cumin", name: "Cumin", icon: <Cookie size={24} />, category: "spice" },
 ];
 
 const categories = [
@@ -61,7 +60,7 @@ const categories = [
   { id: "vegetable", title: "Vegetables", icon: <Carrot size={20} /> },
   { id: "grain", title: "Grains", icon: <Wheat size={20} /> },
   { id: "dairy", title: "Dairy", icon: <Milk size={20} /> },
-  { id: "spice", title: "Spices", icon: <Salt size={20} /> },
+  { id: "spice", title: "Spices", icon: <Soup size={20} /> },
 ];
 
 interface IngredientSelectorProps {
