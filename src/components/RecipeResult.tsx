@@ -11,178 +11,6 @@ import { cn } from "@/lib/utils";
 type FlavorProfile = "spicy" | "sweet" | "savory" | "tangy" | "fresh";
 type Cuisine = "italian" | "mexican" | "asian" | "mediterranean" | "american";
 
-// Mock recipe data based on selected ingredients and preferences
-const generateRecipe = (ingredients: Ingredient[], flavor: FlavorProfile | null, cuisine: Cuisine | null): Recipe => {
-  // Base recipes by cuisine type
-  const cuisineRecipes: Record<string, Partial<Recipe>> = {
-    italian: {
-      title: "Italian Pasta Primavera",
-      description: "A light and fresh pasta dish with seasonal vegetables.",
-      ingredients: [
-        { name: "Pasta", amount: "250g" },
-        { name: "Olive Oil", amount: "3 tbsp" },
-        { name: "Garlic", amount: "3 cloves" },
-        { name: "Cherry Tomatoes", amount: "200g" },
-        { name: "Basil", amount: "handful" },
-        { name: "Parmesan", amount: "50g" }
-      ],
-      instructions: [
-        "Bring a large pot of salted water to a boil.",
-        "Cook pasta according to package instructions.",
-        "Heat olive oil and sauté garlic until fragrant.",
-        "Add cherry tomatoes and cook until they begin to burst.",
-        "Drain pasta and add to the pan with vegetables.",
-        "Toss with fresh basil and grated parmesan."
-      ]
-    },
-    mexican: {
-      title: "Mexican Bean Bowl",
-      description: "A hearty bowl with beans, rice, and fresh vegetables.",
-      ingredients: [
-        { name: "Black Beans", amount: "400g" },
-        { name: "Rice", amount: "200g" },
-        { name: "Avocado", amount: "1" },
-        { name: "Lime", amount: "1" },
-        { name: "Cilantro", amount: "handful" },
-        { name: "Chili", amount: "1 small" }
-      ],
-      instructions: [
-        "Cook rice according to package instructions.",
-        "Heat beans in a saucepan with a pinch of cumin.",
-        "Slice avocado and cut lime into wedges.",
-        "Chop cilantro and thinly slice chili.",
-        "Assemble bowl with rice, beans, avocado, and toppings.",
-        "Squeeze lime juice over the top and garnish with cilantro."
-      ]
-    },
-    asian: {
-      title: "Asian Stir-Fry",
-      description: "A quick and flavorful stir-fry with vegetables and your choice of protein.",
-      ingredients: [
-        { name: "Rice Noodles", amount: "200g" },
-        { name: "Soy Sauce", amount: "3 tbsp" },
-        { name: "Ginger", amount: "1 inch piece" },
-        { name: "Garlic", amount: "2 cloves" },
-        { name: "Mixed Vegetables", amount: "300g" },
-        { name: "Sesame Oil", amount: "1 tbsp" }
-      ],
-      instructions: [
-        "Soak rice noodles according to package instructions.",
-        "Heat a wok or large pan over high heat.",
-        "Add oil and quickly stir-fry ginger and garlic.",
-        "Add vegetables and stir-fry until tender-crisp.",
-        "Add drained noodles and soy sauce, toss to combine.",
-        "Drizzle with sesame oil before serving."
-      ]
-    },
-    mediterranean: {
-      title: "Mediterranean Salad",
-      description: "A fresh salad with olives, feta, and a lemon vinaigrette.",
-      ingredients: [
-        { name: "Cucumber", amount: "1" },
-        { name: "Cherry Tomatoes", amount: "200g" },
-        { name: "Red Onion", amount: "1/2" },
-        { name: "Feta Cheese", amount: "100g" },
-        { name: "Kalamata Olives", amount: "100g" },
-        { name: "Olive Oil", amount: "3 tbsp" },
-        { name: "Lemon", amount: "1" }
-      ],
-      instructions: [
-        "Dice cucumber and halve cherry tomatoes.",
-        "Thinly slice red onion.",
-        "Combine vegetables in a large bowl.",
-        "Crumble feta cheese over the top.",
-        "Add kalamata olives.",
-        "Whisk together olive oil, lemon juice, salt, and pepper.",
-        "Drizzle dressing over salad and toss gently."
-      ]
-    },
-    american: {
-      title: "Classic Burger",
-      description: "A juicy burger with all the toppings.",
-      ingredients: [
-        { name: "Ground Beef", amount: "500g" },
-        { name: "Burger Buns", amount: "4" },
-        { name: "Lettuce", amount: "4 leaves" },
-        { name: "Tomato", amount: "1" },
-        { name: "Onion", amount: "1/2" },
-        { name: "Cheese", amount: "4 slices" },
-        { name: "Ketchup", amount: "to taste" },
-        { name: "Mustard", amount: "to taste" }
-      ],
-      instructions: [
-        "Form beef into 4 equal-sized patties.",
-        "Season patties with salt and pepper.",
-        "Cook on a hot grill or pan for 3-4 minutes per side.",
-        "Toast the burger buns lightly.",
-        "Add cheese to patties in the last minute of cooking.",
-        "Assemble burgers with lettuce, tomato, onion, and condiments."
-      ]
-    }
-  };
-
-  // Flavor modifiers
-  const flavorModifiers: Record<string, { title: string, ingredient: { name: string, amount: string } }> = {
-    spicy: { 
-      title: "Spicy ", 
-      ingredient: { name: "Red Chili Flakes", amount: "1 tsp" } 
-    },
-    sweet: { 
-      title: "Sweet ", 
-      ingredient: { name: "Honey", amount: "1 tbsp" } 
-    },
-    savory: { 
-      title: "Savory ", 
-      ingredient: { name: "Herbs de Provence", amount: "1 tsp" } 
-    },
-    tangy: { 
-      title: "Tangy ", 
-      ingredient: { name: "Lemon Juice", amount: "2 tbsp" } 
-    },
-    fresh: { 
-      title: "Fresh ", 
-      ingredient: { name: "Fresh Herbs", amount: "handful" } 
-    }
-  };
-
-  // Default to Italian if no cuisine selected
-  const selectedCuisine = cuisine || "italian";
-  const baseRecipe = cuisineRecipes[selectedCuisine];
-  
-  // Create recipe with proper typing
-  const recipe: Recipe = {
-    title: baseRecipe.title || "Custom Recipe",
-    description: baseRecipe.description || "A delicious recipe based on your preferences.",
-    preparationTime: "20 min",
-    cookingTime: "25 min",
-    servings: 4,
-    difficulty: "Medium",
-    ingredients: [...(baseRecipe.ingredients || [])],
-    instructions: [...(baseRecipe.instructions || [])],
-    tips: [
-      "Customize this recipe with your favorite herbs and spices.",
-      "For a more substantial meal, add your choice of protein.",
-      "Leftovers can be stored in the refrigerator for up to 3 days."
-    ]
-  };
-
-  // Apply flavor modifier if selected
-  if (flavor && flavorModifiers[flavor]) {
-    recipe.title = flavorModifiers[flavor].title + recipe.title;
-    recipe.ingredients.push(flavorModifiers[flavor].ingredient);
-  }
-
-  // Add any matching ingredients from user selection
-  const selectedIngredientNames = ingredients.map(ing => ing.name.toLowerCase());
-  
-  // Add a tip about the selected ingredients
-  if (ingredients.length > 0) {
-    recipe.tips.unshift(`Make good use of your ${ingredients.map(i => i.name).join(', ')}.`);
-  }
-
-  return recipe;
-};
-
 // Recipe type definition
 interface Recipe {
   title: string;
@@ -198,6 +26,332 @@ interface Recipe {
   instructions: string[];
   tips: string[];
 }
+
+// Generate recipe based on selected ingredients, flavor, and cuisine
+const generateRecipe = (ingredients: Ingredient[], flavor: FlavorProfile | null, cuisine: Cuisine | null): Recipe => {
+  // Default recipe structure
+  const baseRecipe: Recipe = {
+    title: "Custom Recipe",
+    description: "A delicious recipe based on your preferences.",
+    preparationTime: "20 min",
+    cookingTime: "25 min",
+    servings: 4,
+    difficulty: "Medium",
+    ingredients: [],
+    instructions: [
+      "Prepare all ingredients before starting.",
+      "Follow the steps carefully for best results."
+    ],
+    tips: [
+      "Customize this recipe with your favorite herbs and spices.",
+      "For a more substantial meal, add your choice of protein.",
+      "Leftovers can be stored in the refrigerator for up to 3 days."
+    ]
+  };
+
+  // Convert selected ingredients to recipe ingredients
+  const selectedIngredientsList = ingredients.map(ing => ({
+    name: ing.name,
+    amount: getRandomAmount(ing.name)
+  }));
+
+  // Add selected ingredients to recipe
+  baseRecipe.ingredients = selectedIngredientsList;
+
+  // Add basic ingredients that are usually needed
+  if (selectedIngredientsList.length > 0 && !selectedIngredientsList.some(ing => ing.name === "Salt")) {
+    baseRecipe.ingredients.push({ name: "Salt", amount: "to taste" });
+  }
+  
+  if (selectedIngredientsList.length > 0 && !selectedIngredientsList.some(ing => ing.name === "Pepper")) {
+    baseRecipe.ingredients.push({ name: "Pepper", amount: "to taste" });
+  }
+
+  // Apply flavor modifier
+  if (flavor) {
+    const flavoringredient = getFlavorIngredient(flavor);
+    if (flavoringredient && !baseRecipe.ingredients.some(ing => ing.name === flavoringredient.name)) {
+      baseRecipe.ingredients.push(flavoringredient);
+    }
+    
+    baseRecipe.title = `${capitalize(flavor)} ${getCuisineAdjective(cuisine || "italian")} Delight`;
+  }
+
+  // Generate appropriate instructions based on ingredients and cuisine
+  baseRecipe.instructions = generateInstructions(selectedIngredientsList, cuisine, flavor);
+
+  // Generate description based on ingredients, flavor, and cuisine
+  baseRecipe.description = generateDescription(selectedIngredientsList, flavor, cuisine);
+
+  // Add tips based on specific ingredients
+  baseRecipe.tips = generateTips(selectedIngredientsList, flavor, cuisine);
+
+  return baseRecipe;
+};
+
+// Helper functions for recipe generation
+const getRandomAmount = (ingredientName: string): string => {
+  const units = {
+    protein: ["200g", "250g", "300g", "2 fillets", "4 pieces"],
+    vegetable: ["1 cup", "200g", "2 medium", "3 small", "1 large"],
+    grain: ["200g", "1 cup", "250g"],
+    dairy: ["100g", "2 tbsp", "1/4 cup", "3 tbsp"],
+    spice: ["1 tsp", "2 tsp", "1 tbsp", "a pinch", "to taste"]
+  };
+
+  const proteinIngredients = ["Beef", "Chicken", "Fish", "Pork", "Tofu", "Shrimp", "Eggs"];
+  const vegetableIngredients = ["Carrot", "Broccoli", "Spinach", "Tomato", "Onion", "Garlic", "Potato", "Bell Pepper"];
+  const grainIngredients = ["Rice", "Pasta", "Bread", "Quinoa", "Oats"];
+  const dairyIngredients = ["Milk", "Cheese", "Yogurt", "Butter"];
+  const spiceIngredients = ["Salt", "Pepper", "Oregano", "Basil", "Thyme", "Paprika", "Cumin"];
+
+  let category = "vegetable";
+  if (proteinIngredients.includes(ingredientName)) category = "protein";
+  else if (grainIngredients.includes(ingredientName)) category = "grain";
+  else if (dairyIngredients.includes(ingredientName)) category = "dairy";
+  else if (spiceIngredients.includes(ingredientName)) category = "spice";
+
+  const amountOptions = units[category as keyof typeof units];
+  return amountOptions[Math.floor(Math.random() * amountOptions.length)];
+};
+
+const getFlavorIngredient = (flavor: FlavorProfile): { name: string, amount: string } | null => {
+  switch (flavor) {
+    case "spicy":
+      return { name: "Red Chili Flakes", amount: "1 tsp" };
+    case "sweet":
+      return { name: "Honey", amount: "2 tbsp" };
+    case "savory":
+      return { name: "Herbs de Provence", amount: "1 tsp" };
+    case "tangy":
+      return { name: "Lemon Juice", amount: "2 tbsp" };
+    case "fresh":
+      return { name: "Fresh Herbs", amount: "handful" };
+    default:
+      return null;
+  }
+};
+
+const capitalize = (str: string): string => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const getCuisineAdjective = (cuisine: Cuisine): string => {
+  switch (cuisine) {
+    case "italian":
+      return "Italian";
+    case "mexican":
+      return "Mexican";
+    case "asian":
+      return "Asian";
+    case "mediterranean":
+      return "Mediterranean";
+    case "american":
+      return "American";
+    default:
+      return "Fusion";
+  }
+};
+
+const generateInstructions = (
+  ingredients: { name: string, amount: string }[], 
+  cuisine: Cuisine | null, 
+  flavor: FlavorProfile | null
+): string[] => {
+  const instructions: string[] = [];
+  
+  // Basic preparation steps
+  const proteins = ingredients.filter(ing => 
+    ["Beef", "Chicken", "Fish", "Pork", "Tofu", "Shrimp"].includes(ing.name)
+  );
+  
+  const vegetables = ingredients.filter(ing => 
+    ["Carrot", "Broccoli", "Spinach", "Tomato", "Onion", "Garlic", "Potato", "Bell Pepper"].includes(ing.name)
+  );
+
+  const grains = ingredients.filter(ing => 
+    ["Rice", "Pasta", "Bread", "Quinoa", "Oats"].includes(ing.name)
+  );
+
+  // Preparation steps
+  if (vegetables.length > 0) {
+    instructions.push(`Wash and chop ${vegetables.map(v => v.name.toLowerCase()).join(", ")}.`);
+  }
+
+  if (proteins.length > 0) {
+    instructions.push(`Prepare ${proteins.map(p => p.name.toLowerCase()).join(", ")} by cutting into bite-sized pieces.`);
+  }
+
+  // Cooking methods based on cuisine
+  if (cuisine === "italian") {
+    if (ingredients.some(ing => ing.name === "Pasta")) {
+      instructions.push("Bring a large pot of salted water to a boil and cook pasta according to package instructions.");
+    }
+    if (ingredients.some(ing => ing.name === "Garlic")) {
+      instructions.push("Sauté garlic in olive oil until fragrant.");
+    }
+    if (vegetables.length > 0) {
+      instructions.push(`Add ${vegetables.map(v => v.name.toLowerCase()).join(", ")} and cook until tender.`);
+    }
+    if (proteins.length > 0) {
+      instructions.push(`Cook ${proteins.map(p => p.name.toLowerCase()).join(", ")} until done.`);
+    }
+    instructions.push("Combine all ingredients, season with salt and pepper, and serve hot.");
+  } 
+  else if (cuisine === "mexican") {
+    if (ingredients.some(ing => ing.name === "Rice")) {
+      instructions.push("Cook rice according to package instructions.");
+    }
+    if (ingredients.some(ing => ing.name === "Onion") || ingredients.some(ing => ing.name === "Bell Pepper")) {
+      instructions.push("Sauté onions and bell peppers until soft.");
+    }
+    if (proteins.length > 0) {
+      instructions.push(`Cook ${proteins.map(p => p.name.toLowerCase()).join(", ")} with Mexican spices until done.`);
+    }
+    instructions.push("Combine all ingredients, add your favorite Mexican toppings, and serve warm.");
+  }
+  else if (cuisine === "asian") {
+    if (ingredients.some(ing => ing.name === "Rice")) {
+      instructions.push("Cook rice according to package instructions.");
+    }
+    if (ingredients.some(ing => ing.name === "Garlic")) {
+      instructions.push("Heat oil in a wok and add garlic.");
+    }
+    if (vegetables.length > 0) {
+      instructions.push(`Stir-fry ${vegetables.map(v => v.name.toLowerCase()).join(", ")} until tender-crisp.`);
+    }
+    if (proteins.length > 0) {
+      instructions.push(`Add ${proteins.map(p => p.name.toLowerCase()).join(", ")} and cook until done.`);
+    }
+    instructions.push("Season with soy sauce and serve hot over rice.");
+  }
+  else if (cuisine === "mediterranean") {
+    if (ingredients.some(ing => ing.name === "Garlic") || ingredients.some(ing => ing.name === "Onion")) {
+      instructions.push("Sauté garlic and onions in olive oil.");
+    }
+    if (vegetables.length > 0) {
+      instructions.push(`Add ${vegetables.map(v => v.name.toLowerCase()).join(", ")} and cook until tender.`);
+    }
+    if (proteins.length > 0) {
+      instructions.push(`Cook ${proteins.map(p => p.name.toLowerCase()).join(", ")} until done.`);
+    }
+    instructions.push("Add fresh herbs, lemon juice, and serve with a drizzle of olive oil.");
+  }
+  else if (cuisine === "american") {
+    if (proteins.length > 0) {
+      instructions.push(`Season ${proteins.map(p => p.name.toLowerCase()).join(", ")} and cook to desired doneness.`);
+    }
+    if (vegetables.length > 0) {
+      instructions.push(`Prepare ${vegetables.map(v => v.name.toLowerCase()).join(", ")} as a side dish.`);
+    }
+    if (grains.length > 0) {
+      instructions.push(`Serve with ${grains.map(g => g.name.toLowerCase()).join(", ")}.`);
+    }
+    instructions.push("Plate everything together and enjoy your meal.");
+  }
+  else {
+    // Generic instructions if no cuisine specified
+    if (vegetables.length > 0) {
+      instructions.push(`Cook ${vegetables.map(v => v.name.toLowerCase()).join(", ")} until tender.`);
+    }
+    if (proteins.length > 0) {
+      instructions.push(`Prepare ${proteins.map(p => p.name.toLowerCase()).join(", ")} according to your preference.`);
+    }
+    if (grains.length > 0) {
+      instructions.push(`Serve with ${grains.map(g => g.name.toLowerCase()).join(", ")}.`);
+    }
+    instructions.push("Combine all ingredients, season to taste, and serve.");
+  }
+
+  // Flavor specific instructions
+  if (flavor === "spicy" && instructions.length > 0) {
+    instructions.splice(Math.floor(instructions.length / 2), 0, "Add red chili flakes for heat.");
+  } else if (flavor === "sweet" && instructions.length > 0) {
+    instructions.splice(Math.floor(instructions.length / 2), 0, "Stir in honey for sweetness.");
+  } else if (flavor === "tangy" && instructions.length > 0) {
+    instructions.splice(Math.floor(instructions.length / 2), 0, "Add fresh lemon juice for tanginess.");
+  } else if (flavor === "fresh" && instructions.length > 0) {
+    instructions.push("Garnish with fresh herbs before serving.");
+  }
+
+  return instructions;
+};
+
+const generateDescription = (
+  ingredients: { name: string, amount: string }[], 
+  flavor: FlavorProfile | null, 
+  cuisine: Cuisine | null
+): string => {
+  const flavorText = flavor ? `${flavor} ` : "";
+  const cuisineText = cuisine ? `${getCuisineAdjective(cuisine)} ` : "";
+  
+  const mainIngredients = ingredients.slice(0, 3).map(ing => ing.name.toLowerCase());
+  
+  if (mainIngredients.length === 0) {
+    return `A delicious ${flavorText}${cuisineText}dish prepared to your preferences.`;
+  }
+  
+  if (mainIngredients.length === 1) {
+    return `A delicious ${flavorText}${cuisineText}dish featuring ${mainIngredients[0]}.`;
+  }
+  
+  if (mainIngredients.length === 2) {
+    return `A delicious ${flavorText}${cuisineText}dish featuring ${mainIngredients[0]} and ${mainIngredients[1]}.`;
+  }
+  
+  return `A delicious ${flavorText}${cuisineText}dish featuring ${mainIngredients[0]}, ${mainIngredients[1]}, and ${mainIngredients[2]}.`;
+};
+
+const generateTips = (
+  ingredients: { name: string, amount: string }[], 
+  flavor: FlavorProfile | null, 
+  cuisine: Cuisine | null
+): string[] => {
+  const tips: string[] = [
+    "Customize this recipe with your favorite herbs and spices."
+  ];
+  
+  // Add tips based on ingredients
+  if (ingredients.some(ing => ["Beef", "Chicken", "Fish", "Pork"].includes(ing.name))) {
+    tips.push("Make sure to cook proteins to the proper internal temperature for food safety.");
+  }
+  
+  if (ingredients.some(ing => ing.name === "Pasta")) {
+    tips.push("For the perfect pasta, cook it al dente and save some pasta water to add to your sauce.");
+  }
+  
+  if (ingredients.some(ing => ing.name === "Rice")) {
+    tips.push("Rinse rice before cooking to remove excess starch and get fluffier results.");
+  }
+  
+  // Add flavor-specific tips
+  if (flavor === "spicy") {
+    tips.push("Adjust the level of spiciness by adding more or less chili flakes.");
+  } else if (flavor === "sweet") {
+    tips.push("Balance the sweetness with a touch of acidity like vinegar or citrus juice.");
+  } else if (flavor === "tangy") {
+    tips.push("Fresh citrus zest can enhance the tangy flavor profile even more.");
+  } else if (flavor === "fresh") {
+    tips.push("Add the fresh herbs at the very end to preserve their flavor and aroma.");
+  } else if (flavor === "savory") {
+    tips.push("A splash of soy sauce or a sprinkle of nutritional yeast can enhance savory flavors.");
+  }
+  
+  // Add cuisine-specific tips
+  if (cuisine === "italian") {
+    tips.push("Finish with a drizzle of good quality olive oil and fresh basil.");
+  } else if (cuisine === "mexican") {
+    tips.push("Serve with warm tortillas and your favorite salsa on the side.");
+  } else if (cuisine === "asian") {
+    tips.push("A final touch of sesame oil and seeds adds beautiful aroma and texture.");
+  } else if (cuisine === "mediterranean") {
+    tips.push("Try adding olives, capers, or sun-dried tomatoes for an authentic Mediterranean flavor.");
+  } else if (cuisine === "american") {
+    tips.push("This dish pairs well with a simple green salad and your favorite dressing.");
+  }
+  
+  return tips;
+};
 
 interface RecipeResultProps {
   selectedIngredients: Ingredient[];
